@@ -60,10 +60,10 @@ function viewLow(){
         
         for (var i = 0; i < res.length; i++) {
             if (res[i].in_stock <= 5) {
-                chosenItem = res[i];
+                chosenItem.push(res[i]);
             }}
             console.log("chosenItem",chosenItem);
-            afterConnection();
+            afterConnection()
             
         })}
         
