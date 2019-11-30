@@ -16,14 +16,11 @@ connection.connect(function(err) {
 function afterConnection() {
     connection.query("SELECT * FROM products", function(err, res) {
         if (err) throw err;
-        // for (var i = 0; i < res.length; i++){
-        // console.log(res[i].item_id + "\nProduct " + res[i].product + "\nDepartment: " +
-        // res[i].department + "\nPrice: " + res[i].price + "\nOn-Hand: " + res[i].in_stock); 
-        // // "\n----------------------------------------\n");
+
         console.log(res);
         // }
         buyStuff();
-        // connection.end()
+
     });
 }
 function buyStuff() {
@@ -70,8 +67,6 @@ function buyStuff() {
                 }
             
             
-            // if(answer.amount <= res[i].in_stock){
-                
             })
         })
     }
