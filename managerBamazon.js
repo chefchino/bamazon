@@ -94,23 +94,24 @@ function addInventory() {
                         console.log("I'm IN")
                         chosenItem = res[i];
                         console.log("chosenItem", chosenItem);
-                    }}
-                    upDate();
-                    function upDate() {
+                    }
+                }
+                upDate();
+                function upDate() {
                     chosenItem.in_stock = chosenItem.in_stock + parseInt(answer.add);
                 }
-                    connection.query(" UPDATE products SET ? WHERE ?",
-                        [{ in_stock: chosenItem.in_stock },
-                        { item_id: chosenItem.item_id }],
-                        function (err) {
-                            if (err) throw err;
-                        })
-                        console.log("You added some stuff!" + "\nThere are " + chosenItem.in_stock + " " + chosenItem.product + " left.")
-                        afterConnection();
-                
-                
+                connection.query(" UPDATE products SET ? WHERE ?",
+                    [{ in_stock: chosenItem.in_stock },
+                    { item_id: chosenItem.item_id }],
+                    function (err) {
+                        if (err) throw err;
+                    })
+                console.log("You added some stuff!" + "\nThere are " + chosenItem.in_stock + " " + chosenItem.product + " left.")
+                afterConnection();
+
+
                 // if (chosenItem.in_stock >= 0) {
-                    
+
             })
 
     })
@@ -119,6 +120,48 @@ function addInventory() {
 function addProduct() {
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
-
-    })
+        inquire.prompt([
+            {
+                name: "item",
+                type: "input",
+                message: "What new product are you adding?"
+            },
+            {
+                name: "amount",
+                tpye: "How many are you adding?"
+            },
+            {
+                name: "dept",
+                type: "input",
+                message: " Which department are you adding to?"
+            },
+            {
+                name: "price",
+                type: "input",
+                message: "How much is it?",
+                validate: function (value) {
+                    if (isNaN(value) === false) {
+                        return true;
+                    }
+                    return false;
+                }
+            }
+        ])
+            .then(function(answer) {
+                connection.query(
+                    "INSERT INTO products SET ?",
+                    {
+                        product: answer.item,
+                        department: answer.dept,
+                        price: answer.price,
+                        in_stock: answer.amount
+                    },
+                    function (err) {
+                        if (err) throw err 
+                            console.log("You added " + answer.item + " to the inventory.");
+                            afterConnection();
+                        })
+                    })
+            })
+    
 }
