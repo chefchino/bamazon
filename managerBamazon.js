@@ -1,6 +1,6 @@
 var mysql = require("mysql");
 var inquire = require("inquirer");
-
+// var nodeRed = require("node-red-node-ui-table");
 var connection = mysql.createConnection({
     host: "localhost",
     port: 3306,

@@ -1,5 +1,6 @@
 var mysql = require("mysql");
 var inquire = require("inquirer");
+// var nodeRed = require("node-red-node-ui-table");
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -49,11 +50,13 @@ function buyStuff() {
                 }
             }
                 if (chosenItem.in_stock >= parseInt(answer.amount)) {
-                    var sum = chosenItem.price * answer.amount;
+                    var sum = chosenItem.price * parseInt(answer.amount);
+                    var sales = sum + chosenItem.product_sales;
                     chosenItem.in_stock = chosenItem.in_stock - parseInt(answer.amount)
                     connection.query("UPDATE products SET ? WHERE ?",
                                       [{in_stock: chosenItem.in_stock},
-                                        {item_id: chosenItem.item_id}],
+                                        {item_id: chosenItem.item_id},
+                                         {product_sales: sales}],
                                       function(err) {
                                           if (err) throw err;
                                       })
