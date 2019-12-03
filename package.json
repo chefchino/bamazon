@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/chefchino/bamazon#readme",
   "dependencies": {
+    "console.table": "^0.10.0",
     "inquirer": "^7.0.0",
     "mysql": "^2.17.1",
     "node-red-node-ui-table": "^0.1.5"

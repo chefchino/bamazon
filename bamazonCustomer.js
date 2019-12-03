@@ -1,5 +1,6 @@
 var mysql = require("mysql");
 var inquire = require("inquirer");
+var cTable = require('console.table');
 // var nodeRed = require("node-red-node-ui-table");
 
 var connection = mysql.createConnection({
@@ -18,7 +19,7 @@ function afterConnection() {
     connection.query("SELECT * FROM products", function(err, res) {
         if (err) throw err;
 
-        console.log(res);
+        console.table(res);
         // }
         buyStuff();
 
@@ -49,19 +50,21 @@ function buyStuff() {
                     console.log("chosenItem",chosenItem);
                 }
             }
-                if (chosenItem.in_stock >= parseInt(answer.amount)) {
-                    var sum = chosenItem.price * parseInt(answer.amount);
-                    var sales = sum + chosenItem.product_sales;
-                    chosenItem.in_stock = chosenItem.in_stock - parseInt(answer.amount)
+                
+            if (chosenItem.in_stock >= parseInt(answer.amount)) {
+                // var sum = chosenItem.price * parseInt(answer.amount);
+                chosenItem.product_sales = chosenItem.product_sales + (chosenItem.price * parseInt(answer.amount));
+                chosenItem.in_stock = chosenItem.in_stock - parseInt(answer.amount);
                     connection.query("UPDATE products SET ? WHERE ?",
-                                      [{in_stock: chosenItem.in_stock},
-                                        {item_id: chosenItem.item_id},
-                                         {product_sales: sales}],
-                                      function(err) {
-                                          if (err) throw err;
-                                      })
-                    console.log("You made a purchase!" + "\nThere are " + chosenItem.in_stock + " " + chosenItem.product + " left.")
-                    console.log("Your total is $" + sum);
+                    [{in_stock: chosenItem.in_stock,
+                        product_sales: chosenItem.product_sales},
+                        {item_id: chosenItem.item_id}],
+                        function(err) {
+                            if (err) throw err;
+                        })
+                        console.log("You made a purchase!" + "\nThere are " + chosenItem.in_stock + " " + chosenItem.product + " left.")
+                        // console.log("Your total is $" + sum);
+                        console.log("chosen1: " + chosenItem.product_sales),
                     buyStuff();
                     
                 }else{
@@ -73,3 +76,24 @@ function buyStuff() {
             })
         })
     }
+    // function update() {
+    //     console.log("updating product list...");
+    //     var query = connection.query(
+    //         "UPDATE products SET ? WHERE ?",
+    //         [
+    //             {
+    //                 in_stock: chosenItem.in_stock
+    //             },
+    //             {
+    //                 item_id: chosenItem.item_id
+    //             },
+    //             {
+    //                 product_sales: chosenItem.product_sales
+    //             }
+    //         ],
+    //         function(err, res) {
+    //             if (err) throw err;
+    //         }
+    //     );
+    //     console.log(query.sql);
+    // }

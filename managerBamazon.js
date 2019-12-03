@@ -1,5 +1,6 @@
 var mysql = require("mysql");
 var inquire = require("inquirer");
+var cTable = require('console.table');
 // var nodeRed = require("node-red-node-ui-table");
 var connection = mysql.createConnection({
     host: "localhost",
@@ -48,7 +49,7 @@ function afterConnection() {
 function viewProduct() {
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
-        console.log(res);
+        console.table(res);
         afterConnection();
     })
 }
@@ -63,7 +64,7 @@ function viewLow() {
                 chosenItem.push(res[i]);
             }
         }
-        console.log("chosenItem", chosenItem);
+        console.table("chosenItem", chosenItem);
         afterConnection()
 
     })
@@ -72,7 +73,7 @@ function viewLow() {
 function addInventory() {
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
-        console.log(res)
+        console.table(res)
         inquire
             .prompt(
                 [{
